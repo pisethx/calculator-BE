@@ -17,9 +17,9 @@ const getRandomizersByUser = catchAsync(async (req, res) => {
 })
 
 const deleteRandomizerById = catchAsync(async (req, res) => {
-  const randomizer = await randomizerService.deleteRandomizerById(req.params.randomizerId, req.user)
+  await randomizerService.deleteRandomizerById(req.params.randomizerId, req.user)
 
-  res.status(httpStatus.OK).send(randomizer)
+  res.status(httpStatus.OK).send()
 })
 
 module.exports = {

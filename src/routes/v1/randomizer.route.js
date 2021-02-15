@@ -69,19 +69,20 @@ module.exports = router
 /**
  * @swagger
  * path:
- *  /randomizer/:randomizerId:
+ *  /randomizer/{id}:
  *    delete:
  *      summary: delete user's randomizer, get randomizerId from /v1/randomizer/me
  *      tags: [Randomizer]
  *      security:
  *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Randomizer id
  *      responses:
  *        "200":
- *          description: OK, randomizer deleted
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  $ref: '#/components/schemas/Randomizer'
+ *          description: OK, randomizer deleted (no content)
  */
