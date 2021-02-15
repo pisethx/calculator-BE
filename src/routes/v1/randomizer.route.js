@@ -1,16 +1,16 @@
-const express = require('express');
-const auth = require('../../middlewares/auth');
-const validate = require('../../middlewares/validate');
-const randomizerValidation = require('../../validations/randomizer.validation');
-const randomizerController = require('../../controllers/randomizer.controller');
+const express = require('express')
+const auth = require('../../middlewares/auth')
+const validate = require('../../middlewares/validate')
+const randomizerValidation = require('../../validations/randomizer.validation')
+const randomizerController = require('../../controllers/randomizer.controller')
 
-const router = express.Router();
+const router = express.Router()
 
-router.route('/').post(auth(), validate(randomizerValidation.createRandomizer), randomizerController.createRandomizer);
+router.route('/').post(auth(), validate(randomizerValidation.createRandomizer), randomizerController.createRandomizer)
+router.route('/me').get(auth(), randomizerController.getRandomizersByUser)
+router.route('/:randomizerId').delete(auth(), randomizerController.deleteRandomizerById)
 
-router.route('/me').get(auth(), randomizerController.getRandomizersByUser);
-
-module.exports = router;
+module.exports = router
 
 /**
  * @swagger
@@ -64,4 +64,24 @@ module.exports = router;
  *                    type: array
  *                    items:
  *                      $ref: '#/components/schemas/Randomizer'
+ */
+
+/**
+ * @swagger
+ * path:
+ *  /randomizer/:randomizerId
+ *    delete:
+ *      summary: delete user's randomizer, get randomizerId from /v1/randomizer/me
+ *      tags: [Randomizer]
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        "200":
+ *          description: OK, randomizer deleted
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  $ref: '#/components/schemas/Randomizer'
  */
