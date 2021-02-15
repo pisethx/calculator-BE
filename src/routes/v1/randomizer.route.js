@@ -69,7 +69,7 @@ module.exports = router
 /**
  * @swagger
  * path:
- *  /randomizer/:randomizerId
+ *  /randomizer/:randomizerId:
  *    delete:
  *      summary: delete user's randomizer, get randomizerId from /v1/randomizer/me
  *      tags: [Randomizer]
