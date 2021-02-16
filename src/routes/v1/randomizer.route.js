@@ -8,6 +8,7 @@ const router = express.Router()
 
 router.route('/').post(auth(), validate(randomizerValidation.createRandomizer), randomizerController.createRandomizer)
 router.route('/me').get(auth(), randomizerController.getRandomizersByUser)
+router.route('/me/export').get(auth(), randomizerController.exportRandomizersByUser)
 router.route('/:randomizerId').delete(auth(), randomizerController.deleteRandomizerById)
 
 module.exports = router

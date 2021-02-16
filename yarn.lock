@@ -1758,6 +1758,11 @@
     "async-listener" "^0.6.0"
     "emitter-listener" "^1.1.1"
 
+"convert-array-to-csv@^2.0.0":
+  "integrity" "sha512-dxUINCt28k6WbXGMoB+AaKjGY0Y6GkKwZmT+kvD4nJgVCOKsnIQ3G6n0v2II1lG4NwXQk6EWZ+pPDub9wcqqMg=="
+  "resolved" "https://registry.npmjs.org/convert-array-to-csv/-/convert-array-to-csv-2.0.0.tgz"
+  "version" "2.0.0"
+
 "convert-source-map@^1.4.0", "convert-source-map@^1.6.0", "convert-source-map@^1.7.0":
   "integrity" "sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA=="
   "resolved" "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.7.0.tgz"

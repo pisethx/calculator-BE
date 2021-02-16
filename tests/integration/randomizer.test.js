@@ -33,6 +33,12 @@ describe('Randomizer routes', () => {
         .expect(httpStatus.OK)
 
       expect(res.body.results.length).toEqual(2)
+
+      await request(app)
+        .get('/v1/randomizer/me/export')
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send()
+        .expect(httpStatus.OK)
     })
 
     test('should return 200 with empty result', async () => {
