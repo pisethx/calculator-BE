@@ -70,6 +70,20 @@ module.exports = router
 /**
  * @swagger
  * path:
+ *  /randomizer/me/export:
+ *    get:
+ *      summary: export user's randomizer history as xlsx
+ *      tags: [Randomizer]
+ *      security:
+ *        - bearerAuth: []
+ *      responses:
+ *        "200":
+ *          description: OK
+ */
+
+/**
+ * @swagger
+ * path:
  *  /randomizer/{id}:
  *    delete:
  *      summary: delete user's randomizer, get randomizerId from /v1/randomizer/me
