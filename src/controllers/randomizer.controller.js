@@ -16,11 +16,16 @@ const getRandomizersByUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ results: randomizers })
 })
 
+const saveRandomizerById = catchAsync(async (req, res) => {
+  const randomizer = await randomizerService.saveRandomizerById(req.params.randomizerId)
+
+  res.status(httpStatus.OK).send(randomizer)
+})
+
 const exportRandomizersByUser = catchAsync(async (req, res) => {
   const randomizers = await randomizerService.getRandomizersByUser(req.user)
   const excel = require('node-excel-export')
 
-  // You can define styles as json object
   const styles = {
     headerDark: {
       fill: {
@@ -39,10 +44,8 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     },
   }
 
-  //Here you specify the export structure
   const specification = {
     id: {
-      // <- the key should match the actual data key
       displayName: 'ID', // <- Here you specify the column header
       headerStyle: styles.headerDark, // <- Header style
       width: 200,
@@ -64,10 +67,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     },
   }
 
-  // Create the excel report.
-  // This function will return Buffer
   const report = excel.buildExport([
-    // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
     {
       name: 'Randomizer', // <- Specify sheet name (optional)
       specification: specification, // <- Report specification
@@ -80,10 +80,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     },
   ])
 
-  // You can then return this straight
   res.attachment('report.xlsx') // This is sails.js specific (in general you need to set headers)
-
-  // OR you can save this buffer to the disk by creating a file.
 
   res.contentType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   res.status(httpStatus.OK).send(report)
@@ -98,6 +95,7 @@ const deleteRandomizerById = catchAsync(async (req, res) => {
 module.exports = {
   createRandomizer,
   getRandomizersByUser,
+  saveRandomizerById,
   deleteRandomizerById,
   exportRandomizersByUser,
 }

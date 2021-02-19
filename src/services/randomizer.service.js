@@ -57,12 +57,26 @@ const queryRandomizers = async (filter, options) => {
   return randomizers
 }
 
-const getRandomizerById = async (id) => {
-  return Randomizer.findById(id)
+const getRandomizerById = async (randomizerId) => {
+  return Randomizer.findById(randomizerId)
 }
 
 const getRandomizersByUser = async (user) => {
-  return Randomizer.find({ user: { $eq: user } })
+  return Randomizer.find({ user: { $eq: user }, saved: true })
+}
+
+const saveRandomizerById = async (randomizerId) => {
+  const randomizer = await getRandomizerById(randomizerId)
+
+  if (!randomizer) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Randomizer not found')
+  }
+
+  Object.assign(randomizer, { ...randomizer, saved: true })
+
+  await randomizer.save()
+
+  return randomizer
 }
 
 /**
@@ -89,6 +103,7 @@ const deleteRandomizerById = async (randomizerId, user) => {
 module.exports = {
   createRandomizer,
   queryRandomizers,
+  saveRandomizerById,
   getRandomizerById,
   getRandomizersByUser,
   deleteRandomizerById,

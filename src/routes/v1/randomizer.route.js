@@ -9,6 +9,7 @@ const router = express.Router()
 router.route('/').post(auth(), validate(randomizerValidation.createRandomizer), randomizerController.createRandomizer)
 router.route('/me').get(auth(), randomizerController.getRandomizersByUser)
 router.route('/me/export').get(auth(), randomizerController.exportRandomizersByUser)
+router.route('/:randomizerId').put(auth(), randomizerController.saveRandomizerById)
 router.route('/:randomizerId').delete(auth(), randomizerController.deleteRandomizerById)
 
 module.exports = router
@@ -47,15 +48,40 @@ module.exports = router
 /**
  * @swagger
  * path:
+ *  /randomizer/{id}:
+ *    put:
+ *      summary: Save Randomizer
+ *      tags: [Randomizer]
+ *      security:
+ *        - bearerAuth: []
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          required: true
+ *          schema:
+ *            type: string
+ *          description: Randomizer id
+ *      responses:
+ *        "201":
+ *          description: Created
+ *          content:
+ *            application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/Randomizer'
+ */
+
+/**
+ * @swagger
+ * path:
  *  /randomizer/me:
  *    get:
- *      summary: get user's randomizer history
+ *      summary: get user's randomizer saved history
  *      tags: [Randomizer]
  *      security:
  *        - bearerAuth: []
  *      responses:
  *        "200":
- *          description: OK, results of randomizer history for current user
+ *          description: OK, results of randomizer saved history for current user
  *          content:
  *            application/json:
  *              schema:
@@ -72,7 +98,7 @@ module.exports = router
  * path:
  *  /randomizer/me/export:
  *    get:
- *      summary: export user's randomizer history as xlsx
+ *      summary: export user's randomizer saved history as xlsx
  *      tags: [Randomizer]
  *      security:
  *        - bearerAuth: []

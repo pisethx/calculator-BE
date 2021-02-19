@@ -1,12 +1,16 @@
-const mongoose = require('mongoose');
-const { toJSON, paginate } = require('./plugins');
-const { randomizerTypes } = require('../config/randomizer');
+const mongoose = require('mongoose')
+const { toJSON, paginate } = require('./plugins')
+const { randomizerTypes } = require('../config/randomizer')
 
 const randomizerSchema = mongoose.Schema(
   {
     dataset: {
       type: Array,
       required: true,
+    },
+    saved: {
+      type: Boolean,
+      default: false,
     },
     result: {
       type: mongoose.SchemaTypes.Mixed,
@@ -26,14 +30,14 @@ const randomizerSchema = mongoose.Schema(
   {
     timestamps: true,
   }
-);
+)
 
-randomizerSchema.plugin(toJSON);
-randomizerSchema.plugin(paginate);
+randomizerSchema.plugin(toJSON)
+randomizerSchema.plugin(paginate)
 
 /**
  * @typedef Randomizer
  */
-const Randomizer = mongoose.model('Randomizer', randomizerSchema);
+const Randomizer = mongoose.model('Randomizer', randomizerSchema)
 
-module.exports = Randomizer;
+module.exports = Randomizer

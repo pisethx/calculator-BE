@@ -21,10 +21,30 @@ const randomizerTwo = {
 
 describe('Randomizer routes', () => {
   describe('GET v1/randomizer/me', () => {
-    test('should return 200 when randomizer exists', async () => {
+    test('should return 200 with empty data when randomizer not save', async () => {
       await insertUsers([userOne])
 
       await insertRandomizers([randomizerOne, randomizerTwo], userOne)
+
+      const res = await request(app)
+        .get('/v1/randomizer/me')
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send()
+        .expect(httpStatus.OK)
+
+      expect(res.body.results.length).toEqual(0)
+
+      await request(app)
+        .get('/v1/randomizer/me/export')
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send()
+        .expect(httpStatus.OK)
+    })
+
+    test('should return 200 when randomizer exists', async () => {
+      await insertUsers([userOne])
+
+      await insertRandomizers([randomizerOne, randomizerTwo], userOne, true)
 
       const res = await request(app)
         .get('/v1/randomizer/me')
@@ -93,6 +113,7 @@ describe('Randomizer routes', () => {
       expect(res.body.id).toEqual(expect.anything())
       expect(res.body.dataset).toEqual(randomizerBody.dataset)
       expect(res.body.type).toEqual(randomizerBody.type)
+      expect(res.body.saved).toEqual(false)
 
       if (res.body.type === randomizerTypes.GROUP) {
         const maxNumberOfItemsPerGroup = Math.ceil(randomizerBody.dataset.length / randomizerBody.numberOfGroups)
@@ -107,6 +128,27 @@ describe('Randomizer routes', () => {
 
     test('should throw unauthorized error if not authenticated', async () => {
       await request(app).post('/v1/randomizer').send(randomizerBody).expect(httpStatus.UNAUTHORIZED)
+    })
+  })
+
+  describe('PUT v1/randomizer/randomizerId', () => {
+    test('should return randomizer when saved', async () => {
+      await insertUsers([userOne])
+
+      await insertRandomizers([randomizerOne], userOne)
+
+      const res = await request(app)
+        .put(`/v1/randomizer/${randomizerOne._id}`)
+        .set('Authorization', `Bearer ${userOneAccessToken}`)
+        .send()
+        .expect(httpStatus.OK)
+
+      expect(res.body.saved).toBe(true)
+
+      const dbRandomizer = await Randomizer.findById(res.body.id)
+
+      expect(dbRandomizer).toBeDefined()
+      expect(dbRandomizer.saved).toBe(true)
     })
   })
 
