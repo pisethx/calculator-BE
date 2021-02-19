@@ -131,14 +131,14 @@ describe('Randomizer routes', () => {
     })
   })
 
-  describe('PUT v1/randomizer/randomizerId', () => {
+  describe('PATCH v1/randomizer/randomizerId', () => {
     test('should return randomizer when saved', async () => {
       await insertUsers([userOne])
 
       await insertRandomizers([randomizerOne], userOne)
 
       const res = await request(app)
-        .put(`/v1/randomizer/${randomizerOne._id}`)
+        .patch(`/v1/randomizer/${randomizerOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.OK)
