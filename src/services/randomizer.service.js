@@ -11,9 +11,9 @@ const shuffleArr = require('../utils/shuffleArr')
  * @returns {Promise<Randomizer>}
  */
 
-const randomizeGroup = (dataset, numberOfGroups) => {
+const randomizeGroup = (dataset, quantity) => {
   const result = []
-  let totalGroups = numberOfGroups
+  let totalGroups = quantity
   let arr = shuffleArr([...dataset])
 
   while (arr.length) {
@@ -26,18 +26,24 @@ const randomizeGroup = (dataset, numberOfGroups) => {
   return result
 }
 
-const randomizeIndividual = (dataset) => {
+const randomizeIndividual = (dataset, quantity) => {
   const randomIdx = rando(dataset.length - 1)
 
   return dataset[randomIdx]
 }
 
+const randomizeCustom = (dataset, quantity) => {
+  const arr = shuffleArr([...dataset])
+  return arr.slice(0, quantity)
+}
+
 const createRandomizer = async (randomizerBody) => {
-  const { type, dataset, numberOfGroups } = randomizerBody
+  const { type, dataset, quantity } = randomizerBody
   let result = []
 
   if (type === randomizerTypes.INDIVIDUAL) result = randomizeIndividual(dataset)
-  if (type === randomizerTypes.GROUP) result = randomizeGroup(dataset, numberOfGroups)
+  if (type === randomizerTypes.CUSTOM) result = randomizeCustom(dataset, quantity)
+  if (type === randomizerTypes.GROUP) result = randomizeGroup(dataset, quantity)
 
   const randomizer = await Randomizer.create({ ...randomizerBody, result })
   return randomizer
@@ -65,11 +71,15 @@ const getRandomizersByUser = async (user) => {
   return Randomizer.find({ user: { $eq: user }, saved: true })
 }
 
-const saveRandomizerById = async (randomizerId) => {
+const saveRandomizerById = async (randomizerId, user) => {
   const randomizer = await getRandomizerById(randomizerId)
 
   if (!randomizer) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Randomizer not found')
+  }
+
+  if (!randomizer.user.equals(user._id)) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid randomizer')
   }
 
   Object.assign(randomizer, { ...randomizer, saved: true })
@@ -92,7 +102,7 @@ const deleteRandomizerById = async (randomizerId, user) => {
   }
 
   if (!randomizer.user.equals(user._id)) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Cannot delete randomizer')
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid randomizer')
   }
 
   await randomizer.remove()

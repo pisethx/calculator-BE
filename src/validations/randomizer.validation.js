@@ -1,6 +1,6 @@
-const Joi = require('joi');
-const { objectId } = require('./custom.validation');
-const { randomizerTypes } = require('../config/randomizer');
+const Joi = require('joi')
+const { objectId } = require('./custom.validation')
+const { randomizerTypes } = require('../config/randomizer')
 
 const createRandomizer = {
   body: Joi.object().keys({
@@ -8,13 +8,13 @@ const createRandomizer = {
     type: Joi.string()
       .required()
       .valid(...Object.values(randomizerTypes)),
-    numberOfGroups: Joi.when('type', {
-      is: Joi.valid(randomizerTypes.GROUP),
+    quantity: Joi.when('type', {
+      is: Joi.valid(randomizerTypes.GROUP, randomizerTypes.CUSTOM),
       then: Joi.number().integer().min(1).max(Joi.ref('dataset.length')).required(),
       otherwise: Joi.any(),
     }),
   }),
-};
+}
 
 const getRandomizers = {
   query: Joi.object().keys({
@@ -24,23 +24,23 @@ const getRandomizers = {
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
   }),
-};
+}
 
 const getRandomizer = {
   params: Joi.object().keys({
     randomizerId: Joi.string().custom(objectId),
   }),
-};
+}
 
 const deleteRandomizer = {
   params: Joi.object().keys({
     randomizerId: Joi.string().custom(objectId),
   }),
-};
+}
 
 module.exports = {
   createRandomizer,
   getRandomizers,
   getRandomizer,
   deleteRandomizer,
-};
+}

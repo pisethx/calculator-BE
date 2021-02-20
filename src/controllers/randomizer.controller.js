@@ -17,14 +17,13 @@ const getRandomizersByUser = catchAsync(async (req, res) => {
 })
 
 const saveRandomizerById = catchAsync(async (req, res) => {
-  const randomizer = await randomizerService.saveRandomizerById(req.params.randomizerId)
+  const randomizer = await randomizerService.saveRandomizerById(req.params.randomizerId, req.user)
 
   res.status(httpStatus.OK).send(randomizer)
 })
 
 const exportRandomizersByUser = catchAsync(async (req, res) => {
   const randomizers = await randomizerService.getRandomizersByUser(req.user)
-  const excel = require('node-excel-export')
 
   const styles = {
     headerDark: {

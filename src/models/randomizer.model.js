@@ -23,7 +23,7 @@ const randomizerSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [randomizerTypes.GROUP, randomizerTypes.INDIVIDUAL],
+      enum: randomizerTypes,
       required: true,
     },
   },

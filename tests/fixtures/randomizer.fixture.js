@@ -5,7 +5,7 @@ const Randomizer = require('../../src/models/randomizer.model')
 const { randomizerTypes } = require('../../src/config/randomizer')
 
 const dataset = new Array(50).fill(null).map((e) => faker.name.findName())
-const numberOfGroups = rando(1, dataset.length)
+const quantity = rando(1, dataset.length)
 
 const randomizerIndividual = {
   _id: mongoose.Types.ObjectId(),
@@ -17,7 +17,7 @@ const randomizerGroup = {
   _id: mongoose.Types.ObjectId(),
   type: randomizerTypes.GROUP,
   dataset,
-  numberOfGroups: numberOfGroups,
+  quantity: quantity,
 }
 
 const insertRandomizers = async (randomizers, user, saved = false) => {

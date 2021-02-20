@@ -5,18 +5,18 @@ components:
       properties:
         type:
           type: string,
-          enum: [group, individual]
+          enum: [group, individual, custom]
         dataset:
           type: array
         result:
           type: array
-        numberOfGroups:
+        quantity:
           type: number
       example:
         id: 5ebac534954b54139806c112
         dataset: [John, Jack, Joe]
         type: group
-        numberOfGroups: 2
+        quantity: 2
         result: [[John, Joe], [Jack]]
     User:
       type: object
