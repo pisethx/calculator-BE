@@ -158,7 +158,7 @@ module.exports = router
  *      description: Logged in users can fetch only their own user information. Only admins can fetch other users.
  *      tags: [Users]
  *      security:
- *        - bearerAuth: [] 
+ *        - bearerAuth: []
  *      responses:
  *        "200":
  *          description: OK
@@ -172,9 +172,7 @@ module.exports = router
  *          $ref: '#/components/responses/Forbidden'
  *        "404":
  *          $ref: '#/components/responses/NotFound'
- *
- * 
- * 
+ */
 /**
  * @swagger
  * path:
