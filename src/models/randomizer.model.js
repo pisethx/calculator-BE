@@ -26,6 +26,9 @@ const randomizerSchema = mongoose.Schema(
       enum: randomizerTypes,
       required: true,
     },
+    name: {
+      type: String,
+    },
   },
   {
     timestamps: true,

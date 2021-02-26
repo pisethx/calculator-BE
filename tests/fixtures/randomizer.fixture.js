@@ -10,12 +10,14 @@ const quantity = rando(1, dataset.length)
 const randomizerIndividual = {
   _id: mongoose.Types.ObjectId(),
   type: randomizerTypes.INDIVIDUAL,
+  name: 'name-picker',
   dataset,
 }
 
 const randomizerGroup = {
   _id: mongoose.Types.ObjectId(),
   type: randomizerTypes.GROUP,
+  name: 'team-generator',
   dataset,
   quantity: quantity,
 }
