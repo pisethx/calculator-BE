@@ -18,6 +18,14 @@ var _require = require('../services'),
     randomizerService = _require.randomizerService,
     userService = _require.userService;
 
+var formatName = function formatName(str) {
+  var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
+  if (typeof str !== 'string') return str;
+  return str.split(key).map(function (s) {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }).join(' ');
+};
+
 var createRandomizer = catchAsync(function _callee(req, res) {
   var randomizer;
   return regeneratorRuntime.async(function _callee$(_context) {
@@ -83,7 +91,7 @@ var saveRandomizerById = catchAsync(function _callee3(req, res) {
   });
 });
 var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
-  var randomizers, styles, specification, report;
+  var randomizers, formattedRandomizers, styles, specification, report;
   return regeneratorRuntime.async(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
@@ -93,6 +101,17 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
 
         case 2:
           randomizers = _context4.sent;
+          formattedRandomizers = randomizers.sort(function (a, b) {
+            return a.createdAt < b.createdAt ? 1 : -1;
+          }).map(function (rnd, idx) {
+            return _objectSpread({}, rnd, {
+              id: idx + 1,
+              type: formatName(rnd.name),
+              dataset: Array.isArray(rnd.dataset) ? rnd.dataset.join(',') : rnd.dataset,
+              result: JSON.stringify(rnd.result),
+              createdAt: new Date(rnd.createdAt).toLocaleString()
+            });
+          });
           styles = {
             headerDark: {
               fill: {
@@ -116,15 +135,15 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               // <- Here you specify the column header
               headerStyle: styles.headerDark,
               // <- Header style
-              width: 200
+              width: 50
             },
             type: {
-              displayName: 'Type',
+              displayName: 'Dataset',
               headerStyle: styles.headerDark,
               width: 200
             },
             dataset: {
-              displayName: 'Dataset',
+              displayName: 'Items',
               headerStyle: styles.headerDark,
               width: 300
             },
@@ -136,7 +155,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
             createdAt: {
               displayName: 'Created At',
               headerStyle: styles.headerDark,
-              width: 300
+              width: 200
             }
           };
           report = excel.buildExport([{
@@ -144,15 +163,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
             // <- Specify sheet name (optional)
             specification: specification,
             // <- Report specification
-            data: randomizers.map(function (rnd) {
-              return {
-                id: rnd.id,
-                type: rnd.name,
-                dataset: rnd.dataset.join(','),
-                result: JSON.stringify(rnd.result),
-                createdAt: new Date(rnd.createdAt).toLocaleString()
-              };
-            }) // <-- Report data
+            data: formattedRandomizers // <-- Report data
 
           }]);
           res.attachment('report.xlsx'); // This is sails.js specific (in general you need to set headers)
@@ -160,7 +171,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
           res.contentType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
           res.status(httpStatus.OK).send(report);
 
-        case 9:
+        case 10:
         case "end":
           return _context4.stop();
       }

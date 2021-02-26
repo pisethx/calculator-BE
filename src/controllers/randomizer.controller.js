@@ -35,7 +35,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
   const randomizers = await randomizerService.getRandomizersByUser(req.user)
 
   const formattedRandomizers = randomizers
-    ?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+    .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
     .map((rnd, idx) => ({
       ...rnd,
       id: idx + 1,
