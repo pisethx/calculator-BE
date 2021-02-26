@@ -29,6 +29,7 @@ const testRandomizer = async (randomizerBody) => {
     .expect(httpStatus.CREATED)
 
   expect(res.body.user).toEqual({
+    createdAt: expect.anything(),
     id: expect.anything(),
     name: userOne.name,
     email: userOne.email,

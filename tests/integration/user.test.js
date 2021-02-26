@@ -32,12 +32,23 @@ describe('User routes', () => {
         .expect(httpStatus.CREATED)
 
       expect(res.body).not.toHaveProperty('password')
-      expect(res.body).toEqual({ id: expect.anything(), name: newUser.name, email: newUser.email, role: newUser.role })
+      expect(res.body).toEqual({
+        createdAt: expect.anything(),
+        id: expect.anything(),
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+      })
 
       const dbUser = await User.findById(res.body.id)
       expect(dbUser).toBeDefined()
       expect(dbUser.password).not.toBe(newUser.password)
-      expect(dbUser).toMatchObject({ name: newUser.name, email: newUser.email, role: newUser.role })
+      expect(dbUser).toMatchObject({
+        name: newUser.name,
+        email: newUser.email,
+        role: newUser.role,
+        createdAt: expect.anything(),
+      })
     })
 
     test('should be able to create an admin as well', async () => {
@@ -153,6 +164,7 @@ describe('User routes', () => {
       })
       expect(res.body.results).toHaveLength(3)
       expect(res.body.results[0]).toEqual({
+        createdAt: expect.anything(),
         id: userOne._id.toHexString(),
         name: userOne.name,
         email: userOne.email,
@@ -359,6 +371,7 @@ describe('User routes', () => {
         email: userOne.email,
         name: userOne.name,
         role: userOne.role,
+        createdAt: expect.anything(),
       })
     })
 
@@ -421,6 +434,7 @@ describe('User routes', () => {
 
       expect(res.body).not.toHaveProperty('password')
       expect(res.body).toEqual({
+        createdAt: expect.anything(),
         id: userOne._id.toHexString(),
         email: userOne.email,
         name: userOne.name,
@@ -508,6 +522,7 @@ describe('User routes', () => {
       expect(res.body).not.toHaveProperty('password')
       expect(res.body).toEqual({
         id: userOne._id.toHexString(),
+        createdAt: expect.anything(),
         name: updateBody.name,
         email: updateBody.email,
         role: 'user',

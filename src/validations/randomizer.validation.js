@@ -4,6 +4,7 @@ const { randomizerTypes } = require('../config/randomizer')
 
 const createRandomizer = {
   body: Joi.object().keys({
+    name: Joi.string(),
     dataset: Joi.array().required().items(Joi.string()),
     type: Joi.string()
       .required()
