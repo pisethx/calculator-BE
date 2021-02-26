@@ -49,7 +49,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
       headerStyle: styles.headerDark, // <- Header style
       width: 200,
     },
-    name: {
+    type: {
       displayName: 'Type',
       headerStyle: styles.headerDark,
       width: 80,
@@ -64,6 +64,11 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
       headerStyle: styles.headerDark,
       width: 300,
     },
+    createdAt: {
+      displayName: 'Created At',
+      headerStyle: styles.headerDark,
+      width: 300,
+    },
   }
 
   const report = excel.buildExport([
@@ -72,9 +77,10 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
       specification: specification, // <- Report specification
       data: randomizers.map((rnd) => ({
         id: rnd.id,
-        type: rnd.type,
+        type: rnd.name,
         dataset: rnd.dataset.join(','),
         result: JSON.stringify(rnd.result),
+        createdAt: new Date(rnd.createdAt).toLocaleString(),
       })), // <-- Report data
     },
   ])

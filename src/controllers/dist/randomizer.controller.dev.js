@@ -118,7 +118,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               // <- Header style
               width: 200
             },
-            name: {
+            type: {
               displayName: 'Type',
               headerStyle: styles.headerDark,
               width: 80
@@ -132,6 +132,11 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               displayName: 'Result',
               headerStyle: styles.headerDark,
               width: 300
+            },
+            createdAt: {
+              displayName: 'Created At',
+              headerStyle: styles.headerDark,
+              width: 300
             }
           };
           report = excel.buildExport([{
@@ -142,9 +147,10 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
             data: randomizers.map(function (rnd) {
               return {
                 id: rnd.id,
-                type: rnd.type,
+                type: rnd.name,
                 dataset: rnd.dataset.join(','),
-                result: JSON.stringify(rnd.result)
+                result: JSON.stringify(rnd.result),
+                createdAt: new Date(rnd.createdAt).toLocaleString()
               };
             }) // <-- Report data
 
