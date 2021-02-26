@@ -121,7 +121,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
             type: {
               displayName: 'Type',
               headerStyle: styles.headerDark,
-              width: 80
+              width: 200
             },
             dataset: {
               displayName: 'Dataset',

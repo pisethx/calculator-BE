@@ -52,7 +52,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     type: {
       displayName: 'Type',
       headerStyle: styles.headerDark,
-      width: 80,
+      width: 200,
     },
     dataset: {
       displayName: 'Dataset',
