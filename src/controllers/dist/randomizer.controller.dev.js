@@ -110,7 +110,7 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               dataset: Array.isArray(rnd.dataset) ? rnd.dataset.join(',') : rnd.dataset,
               result: JSON.stringify(rnd.result),
               createdAt: new Date(rnd.createdAt).toLocaleString(('en-US', {
-                timeZone: 'Asia/Phnom_Penh'
+                timeZone: 'Asia/Bangkok'
               }))
             });
           });
