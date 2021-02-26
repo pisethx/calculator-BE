@@ -4,6 +4,15 @@ const ApiError = require('../utils/ApiError')
 const catchAsync = require('../utils/catchAsync')
 const { randomizerService, userService } = require('../services')
 
+const formatName = (str, key = '-') => {
+  if (typeof str !== 'string') return str
+
+  return str
+    .split(key)
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(' ')
+}
+
 const createRandomizer = catchAsync(async (req, res) => {
   const randomizer = await randomizerService.createRandomizer({ ...req.body, user: req.user })
   res.status(httpStatus.CREATED).send(randomizer)
@@ -24,6 +33,17 @@ const saveRandomizerById = catchAsync(async (req, res) => {
 
 const exportRandomizersByUser = catchAsync(async (req, res) => {
   const randomizers = await randomizerService.getRandomizersByUser(req.user)
+
+  const formattedRandomizers = randomizers
+    ?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+    .map((rnd, idx) => ({
+      ...rnd,
+      id: idx + 1,
+      type: formatName(rnd.name),
+      dataset: Array.isArray(rnd.dataset) ? rnd.dataset.join(',') : rnd.dataset,
+      result: JSON.stringify(rnd.result),
+      createdAt: new Date(rnd.createdAt).toLocaleString(),
+    }))
 
   const styles = {
     headerDark: {
@@ -47,15 +67,15 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     id: {
       displayName: 'ID', // <- Here you specify the column header
       headerStyle: styles.headerDark, // <- Header style
-      width: 200,
+      width: 50,
     },
     type: {
-      displayName: 'Type',
+      displayName: 'Dataset',
       headerStyle: styles.headerDark,
       width: 200,
     },
     dataset: {
-      displayName: 'Dataset',
+      displayName: 'Items',
       headerStyle: styles.headerDark,
       width: 300,
     },
@@ -67,7 +87,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     createdAt: {
       displayName: 'Created At',
       headerStyle: styles.headerDark,
-      width: 300,
+      width: 200,
     },
   }
 
@@ -75,13 +95,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
     {
       name: 'Randomizer', // <- Specify sheet name (optional)
       specification: specification, // <- Report specification
-      data: randomizers.map((rnd) => ({
-        id: rnd.id,
-        type: rnd.name,
-        dataset: rnd.dataset.join(','),
-        result: JSON.stringify(rnd.result),
-        createdAt: new Date(rnd.createdAt).toLocaleString(),
-      })), // <-- Report data
+      data: formattedRandomizers, // <-- Report data
     },
   ])
 

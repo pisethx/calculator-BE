@@ -83,7 +83,7 @@ describe('Randomizer routes', () => {
         .expect(httpStatus.OK)
     })
 
-    test('should return 200 when randomizer exists', async () => {
+    test('should return 200 when randomizer exists and can be exported', async () => {
       await insertUsers([userOne])
 
       await insertRandomizers([randomizerOne, randomizerTwo], userOne, true)
