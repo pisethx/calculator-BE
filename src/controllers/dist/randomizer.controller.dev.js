@@ -109,7 +109,9 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               type: formatName(rnd.name),
               dataset: Array.isArray(rnd.dataset) ? rnd.dataset.join(',') : rnd.dataset,
               result: JSON.stringify(rnd.result),
-              createdAt: new Date(rnd.createdAt).toLocaleString()
+              createdAt: new Date(rnd.createdAt).toLocaleString(('en-US', {
+                timeZone: 'Asia/Phnom_Penh'
+              }))
             });
           });
           styles = {
