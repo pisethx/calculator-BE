@@ -49,7 +49,7 @@ const exportRandomizersByUser = catchAsync(async (req, res) => {
       headerStyle: styles.headerDark, // <- Header style
       width: 200,
     },
-    type: {
+    name: {
       displayName: 'Type',
       headerStyle: styles.headerDark,
       width: 80,
