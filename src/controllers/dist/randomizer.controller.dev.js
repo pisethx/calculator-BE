@@ -108,7 +108,10 @@ var exportRandomizersByUser = catchAsync(function _callee4(req, res) {
               id: idx + 1,
               type: formatName(rnd.name),
               dataset: Array.isArray(rnd.dataset) ? rnd.dataset.join(',') : rnd.dataset,
-              result: JSON.stringify(rnd.result),
+              result: Array.isArray(rnd.result) ? JSON.stringify(rnd.result.map(function (r) {
+                return Array.isArray(r) ? r.join(', ') : r;
+              })) : rnd.result,
+              //  JSON.stringify(rnd.result),
               createdAt: new Date(rnd.createdAt).toLocaleString(('en-US', {
                 timeZone: 'Asia/Bangkok'
               }))
